@@ -44,7 +44,9 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const payload = { _id: user._id };
       const token = jwt.sign(payload, 'some-secret-key', { expiresIn: '7d' });
-      res.cookie('jwt', token);
+      res.cookie('jwt', token, {
+        sameSite: true,
+      });
       return res.send({ user: payload });
     })
     .catch(next);
@@ -54,7 +56,7 @@ module.exports.getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail(new NotFoundError('Пользоваетеля с таким id нет'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch(next);
 };
 

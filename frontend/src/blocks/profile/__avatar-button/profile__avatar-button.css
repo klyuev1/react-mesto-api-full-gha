@@ -4,7 +4,14 @@
   border: 0;
   background-color: #000000;
   cursor: pointer;
+  margin-right: 30px;
  
+}
+
+@media screen and (max-width: 800px){
+  .profile__avatar-button {
+    margin-right: 0;
+  }
 }
 
 .profile__avatar-button:hover {

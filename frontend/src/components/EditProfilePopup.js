@@ -3,10 +3,12 @@ import PopupWithForm from './PopupWithForm.js';
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
 
 function EditProfilePopup(props) {
+
+  const currentUser = React.useContext(CurrentUserContext);
+  
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
   
-  const currentUser = React.useContext(CurrentUserContext);
   
   React.useEffect(() => {
     setName(currentUser.name);
@@ -35,7 +37,7 @@ function EditProfilePopup(props) {
     <PopupWithForm 
       name = "profile"
       title = "Редактировать профиль"
-      nameButtonSave = "Сохранить"
+      nameButtonSave = {props.isLoading? 'Сохранение...' : 'Сохранить'}
       isOpen = {props.isOpen}
       onClose = {props.onClose}
       onSubmit = {handleSubmit}
@@ -44,7 +46,7 @@ function EditProfilePopup(props) {
         <input 
           id="name" type="text" className="popup__input" 
           name="name" minLength="2" maxLength="40" required 
-          value={name} onChange={handleChangeName}
+          value={name || ''} onChange={handleChangeName}
         />
         <span className="name-error"></span>
       </label>
@@ -52,7 +54,7 @@ function EditProfilePopup(props) {
         <input 
           id="occupation" type="text" className="popup__input" 
           name="occupation" minLength="2" maxLength="200" required 
-          value={description} onChange={handleChangeDescription}
+          value={description || ''} onChange={handleChangeDescription}
         />
         <span className="occupation-error"></span>
       </label>

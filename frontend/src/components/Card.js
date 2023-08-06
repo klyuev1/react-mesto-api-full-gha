@@ -3,10 +3,12 @@ import CurrentUserContext from '../contexts/CurrentUserContext.js'
 
 function Card(props) {
   const currentUser = React.useContext(CurrentUserContext); // Подписка на глобальный стейт
-  const isOwn = props.card.owner._id === currentUser._id; // Наличие кнопки delete
   
-  const isLiked = props.card.likes.some(i => i._id === currentUser._id);
-  const cardLikeButtonClassName = ( 
+  const isOwn = props.card.owner === currentUser._id; // Наличие кнопки delete
+  
+  const isLiked = props.card.likes.some(i => i === currentUser._id);
+  
+  const cardLikeButtonClassName = (
     `element__like ${isLiked && 'element__like_active'}` 
   ); // Наличие лайка и его отрисовка
 

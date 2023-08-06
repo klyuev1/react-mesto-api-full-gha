@@ -25,10 +25,10 @@ function Main(props) {
       </section>
 
       <section className="elements">
-        {props.cards.map(card => ( // cards подтягиваем из App
+        {props.cards.map((card) => ( // cards подтягиваем из App
           <Card 
+            card={card}
             key={card._id} 
-            card={card} 
             onCardClick={props.onCardClick} // Обновление стейта карточки
             onCardLike={props.onCardLike} 
             onCardDelete={props.onCardDelete}

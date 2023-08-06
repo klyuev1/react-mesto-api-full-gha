@@ -1,0 +1,15 @@
+.header__main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
+  border-bottom: 1px solid rgba(84,84,84,.7);
+  min-height: 74px;
+}
+
+@media screen and (max-width: 600px){
+  .header__main {
+    border-top: 1px solid rgba(84,84,84,.7);
+    align-items: center;
+  }
+}

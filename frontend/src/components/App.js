@@ -39,7 +39,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
-
+  //
   //---
   
   // React.useEffect. Загружаем данные пользователя и проверяем наличие токена

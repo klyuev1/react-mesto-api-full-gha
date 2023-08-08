@@ -5,7 +5,7 @@ const cookies = require('cookie-parser');
 const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const auth = require('./middlewares/auth');
-const { createUser, login } = require('./controllers/users');
+const { createUser, login, logOut } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
 const InternalServerError = require('./errors/InternalServerError');
 
@@ -40,6 +40,8 @@ app.post('/signup', celebrate({
     avatar: Joi.string().regex(/^(https?:\/\/)?([a-z0-9-]+\.)*[a-z0-9-]+\.[a-z]{2,}\/?([^\s]*)$/),
   }),
 }), createUser);
+
+app.get('/logout', logOut);
 
 app.use(auth, require('./routes/users'));
 app.use(auth, require('./routes/cards'));

@@ -9,7 +9,6 @@ import CurrentUserContext from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from '../components/EditProfilePopup.js';
 import EditAvatarPopup from '../components/EditAvatarPopup.js';
 import AddPlacePopup from '../components/AddPlacePopup.js';
-// Новые импорты
 import { Routes, Route, useNavigate} from 'react-router-dom';
 import Register from './Register.js';
 import Login from './Login.js';
@@ -18,7 +17,6 @@ import ProtectedRoute from './ProtectedRoute.js';
 import * as auth from '../utils/auth.js';
 import truth from '../images/thurh.svg';
 import fail from '../images/fail.svg';
-
 
 function App() {
   // Стейты и хуки
@@ -39,7 +37,6 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(false);
-  //
   //---
   
   // React.useEffect. Загружаем данные пользователя и проверяем наличие токена
@@ -47,15 +44,31 @@ function App() {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then((res) => {
       const [userData, cardsData] = res;
-        setCurrentUser(userData);
-        setCards(cardsData);
+      setCurrentUser(userData);
+      setCards(cardsData);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
     tokenCheck();
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  },[loggedIn, email]);
+  // currentUser.name, currentUser.about, currentUser.avatar
+
+  // Закрытие попапов по клавише esc
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link
+
+  React.useEffect(() => {
+    function closeByEscape(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if(isOpen) {
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen]);
   //---
   
   // Auth.metods
@@ -84,9 +97,11 @@ function App() {
     auth.authorize(email, password)
       .then((data) => {
         if (data){
+          api.getUserInfo().then((res) => {setCurrentUser(res)}).catch((err) => console.log(err))
           setLoggedIn(true);
           setTitleInfo("Вы успешно авторизировались!");
           setIconInfo(truth);
+          setEmail(data.email);
           // localStorage.setItem('jwt', data.token);
           navigate('/', {replace:true});
           return data;
@@ -104,9 +119,6 @@ function App() {
 
   // Функция проверки токена
   function tokenCheck() {
-      // const jwt = localStorage.getItem("jwt");
-    // if (jwt){
-      // проверим токен
       auth.getContent()
       .then((data) => {
         if (data){
@@ -118,13 +130,6 @@ function App() {
       .catch((err) => console.log(err));
     // }
   }
-  
-  // Функция выхода из аккаунта
-  function signOut(){
-    // localStorage.removeItem('jwt');
-    navigate("/sign-up");
-  }
-  //---
 
   // Функции открытия попапов
   function handleEditProfileClick() {
@@ -155,23 +160,6 @@ function App() {
     setIsInfoTooltipOpen(false);
   }
   
-  // Закрытие попапов по клавише esc
-  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link
-
-  React.useEffect(() => {
-    function closeByEscape(evt) {
-      if(evt.key === 'Escape') {
-        closeAllPopups();
-      }
-    }
-    if(isOpen) {
-      document.addEventListener('keydown', closeByEscape);
-      return () => {
-        document.removeEventListener('keydown', closeByEscape);
-      }
-    }
-  }, [isOpen]);
-  //---
 
   // Обработчики
   // Обработчик лайка карточки
@@ -196,12 +184,13 @@ function App() {
     .finally(() => setIsLoading(false));
   }
 
-  // Обработчик изменения профиля (в инпут попадают данные из попапа)
+  // Обработчик изменения профиля (в инпут попадают данные из попапа) // ЗДЕСЬ ОШИБКА
   function handleUpdateUser(name, about) {
     setIsLoading(true);
     api.patchUserInfo(name, about)
     .then((data) => {
-      setCurrentUser(data);
+      console.log(data)
+      setCurrentUser(data.user); // Здесь ошибка
     })
     .then(() => closeAllPopups())
     .catch((err) => console.log(err))
@@ -213,7 +202,7 @@ function App() {
     setIsLoading(true);
     api.patchAvatar(avatar)
     .then((data) => {
-      setCurrentUser(data);
+      setCurrentUser(data.user);
     })
     .then(() => closeAllPopups())
     .catch((err) => console.log(err))
@@ -265,7 +254,7 @@ function App() {
             <>
               <Header
                 email={email}
-                OnOut={signOut}
+                // OnOut={signOut}
               />
               <ProtectedRoute
                 element={Main}

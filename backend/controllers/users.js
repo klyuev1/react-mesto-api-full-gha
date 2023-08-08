@@ -56,7 +56,7 @@ module.exports.getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail(new NotFoundError('Пользоваетеля с таким id нет'))
-    .then((user) => res.send(user))
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
@@ -116,3 +116,5 @@ module.exports.updateAvatar = (req, res, next) => {
       return next(err);
     });
 };
+
+module.exports.logOut = (req, res) => res.clearCookie('jwt').send({ message: 'logOut'});

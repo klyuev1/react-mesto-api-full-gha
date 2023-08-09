@@ -103,7 +103,8 @@ class Api {
 
 
 const api = new Api({
-  baseUrl: 'http://localhost:3001',
+  // baseUrl: 'http://localhost:3001',
+  baseUrl: 'https://api.klyuev-mesto.nomoreparties.co',
   headers: {
     authorization: '64e76916-bb9d-45f2-aa0a-555c04a49e1a',
     'Content-Type': 'application/json'

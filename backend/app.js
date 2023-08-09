@@ -18,7 +18,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-app.use(cors({ origin: ['http://localhost:3000', 'klyuev-mesto.nomoreparties.co'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:3000', 'https://klyuev-mesto.nomoreparties.co'], credentials: true })); // 1час, 1.40 как запушить изменения в бэке
 
 // Создаем роуты
 app.use(cookies());
@@ -54,5 +54,5 @@ app.use('*', () => {
 app.use(errors());
 app.use(InternalServerError);
 app.listen(PORT, () => {
-  console.log('Server pushed');
+  console.log(`Server pushed on port ${PORT}`);
 });

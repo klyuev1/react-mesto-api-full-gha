@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const AuthorizationError = require('../errors/AuthorizationError');
+
 const { JWT_SECRET = 'secret-word' } = process.env;
 
 // eslint-disable-next-line consistent-return

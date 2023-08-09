@@ -1,4 +1,5 @@
 // Подгружаем код
+// require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cookies = require('cookie-parser');
@@ -8,6 +9,7 @@ const auth = require('./middlewares/auth');
 const { createUser, login, logOut } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
 const InternalServerError = require('./errors/InternalServerError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // Создаем сервер, подключаемся к БД
 const { PORT = 3001 } = process.env;
@@ -23,6 +25,14 @@ app.use(cors({ origin: ['http://localhost:3000', 'https://klyuev-mesto.nomorepar
 // Создаем роуты
 app.use(cookies());
 app.use(express.json());
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -51,6 +61,7 @@ app.use('*', () => {
 });
 
 // Запускаем порт
+app.use(errorLogger);
 app.use(errors());
 app.use(InternalServerError);
 app.listen(PORT, () => {

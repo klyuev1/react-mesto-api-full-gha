@@ -117,4 +117,4 @@ module.exports.updateAvatar = (req, res, next) => {
     });
 };
 
-module.exports.logOut = (req, res) => res.clearCookie('jwt').send({ message: 'logOut'});
+module.exports.logOut = (req, res) => res.clearCookie('jwt').send({ message: 'logOut' });

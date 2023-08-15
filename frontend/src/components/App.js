@@ -9,7 +9,7 @@ import CurrentUserContext from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from '../components/EditProfilePopup.js';
 import EditAvatarPopup from '../components/EditAvatarPopup.js';
 import AddPlacePopup from '../components/AddPlacePopup.js';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate} from 'react-router-dom';
 import Register from './Register.js';
 import Login from './Login.js';
 import InfoTooltip from './InfoTooltip.js';
@@ -224,6 +224,8 @@ function App() {
     <CurrentUserContext.Provider value={currentUser} >
       <div className="page">
         <Routes>
+
+        <Route path="*" element={ loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" /> }/>
 
           <Route path="/sign-up" element={
             <>

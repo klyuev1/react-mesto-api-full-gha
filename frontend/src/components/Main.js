@@ -28,7 +28,7 @@ function Main(props) {
         {props.cards.map((card) => ( // cards подтягиваем из App
           <Card 
             card={card}
-            key={card._id} 
+            key={card._id}
             onCardClick={props.onCardClick} // Обновление стейта карточки
             onCardLike={props.onCardLike} 
             onCardDelete={props.onCardDelete}

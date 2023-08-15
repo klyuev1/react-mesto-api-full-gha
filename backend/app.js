@@ -56,7 +56,7 @@ app.get('/logout', logOut);
 app.use(auth, require('./routes/users'));
 app.use(auth, require('./routes/cards'));
 
-app.use('*', auth, (req, res, next) => {
+app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
 
